@@ -528,7 +528,12 @@ export class PgDataStore extends (EventEmitter as { new (): DataStoreEventEmitte
     return { found: true, result: tx };
   }
 
-  async getTxList(count = 50) {
+  async getTxList({ limit, offset }: { limit: number; offset: number }) {
+    const total = await this.pool.query<TxQueryResult>(`
+      SELECT *
+      FROM txs
+      WHERE canonical = true
+    `);
     const result = await this.pool.query<TxQueryResult>(
       `
       SELECT ${TX_COLUMNS}
@@ -536,11 +541,12 @@ export class PgDataStore extends (EventEmitter as { new (): DataStoreEventEmitte
       WHERE canonical = true
       ORDER BY block_height DESC, tx_index DESC
       LIMIT $1
+      OFFSET $2
       `,
-      [count]
+      [limit, offset]
     );
     const parsed = result.rows.map(r => this.parseTxQueryResult(r));
-    return { results: parsed };
+    return { results: parsed, total: total.rowCount };
   }
 
   async getTxEvents(txId: string, indexBlockHash: string) {
