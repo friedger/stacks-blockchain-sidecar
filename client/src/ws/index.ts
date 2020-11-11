@@ -13,7 +13,7 @@ import { BASE_PATH } from '../generated/runtime';
 
 type IWebSocket = import('ws') | WebSocket;
 
-interface Subscription {
+export interface Subscription {
   unsubscribe(): Promise<void>;
 }
 
