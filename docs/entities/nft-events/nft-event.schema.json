@@ -5,8 +5,8 @@
   "required": [
     "sender",
     "recipient",
-    "asset_identifier",
-    "value",
+    "asset_class",
+    "asset_id",
     "tx_id",
     "block_height"
   ],
@@ -17,10 +17,10 @@
     "recipient": {
       "type": "string"
     },
-    "asset_identifier": {
+    "asset_class": {
       "type": "string"
     },
-    "value": {
+    "asset_id": {
       "type": "object",
       "required": ["hex", "repr"],
       "description": "Identifier of the NFT",
